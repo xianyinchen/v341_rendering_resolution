@@ -31,7 +31,7 @@
 
 #include <cstdint>
 
-#define CC_POXEL_RATIO_CUSTOM 1
+#define CC_PIXEL_RATIO_CUSTOM 1.5
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #include <BaseTsd.h>

@@ -44,8 +44,8 @@ static void updateFBO(GLES3GPUSwapchain* _gpuSwapchain) {
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_gpuSwapchain->glFramebufferTarget);
     }
 
-    _gpuSwapchain->glWidthTarget = _gpuSwapchain->gpuColorTexture->width * CC_POXEL_RATIO_CUSTOM;
-    _gpuSwapchain->glHeightTarget = _gpuSwapchain->gpuColorTexture->height * CC_POXEL_RATIO_CUSTOM;
+    _gpuSwapchain->glWidthTarget = _gpuSwapchain->gpuColorTexture->width * CC_PIXEL_RATIO_CUSTOM;
+    _gpuSwapchain->glHeightTarget = _gpuSwapchain->gpuColorTexture->height * CC_PIXEL_RATIO_CUSTOM;
 
     glGenFramebuffers(1, &_gpuSwapchain->glFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _gpuSwapchain->glFramebuffer);
@@ -173,7 +173,7 @@ void GLES3Swapchain::doCreateSurface(void* windowHandle) {
     auto width  = static_cast<int>(_colorTexture->getWidth());
     auto height = static_cast<int>(_colorTexture->getHeight());
 #if CC_PLATFORM == CC_PLATFORM_ANDROID
-    ANativeWindow_setBuffersGeometry(window, width * CC_POXEL_RATIO_CUSTOM, height * CC_POXEL_RATIO_CUSTOM, nFmt);
+    ANativeWindow_setBuffersGeometry(window, width * CC_PIXEL_RATIO_CUSTOM, height * CC_PIXEL_RATIO_CUSTOM, nFmt);
 #elif CC_PLATFORM == CC_PLATFORM_OHOS
     NativeLayerHandle(window, NativeLayerOps::SET_WIDTH_AND_HEIGHT, width, height);
     NativeLayerHandle(window, SET_FORMAT, nFmt);

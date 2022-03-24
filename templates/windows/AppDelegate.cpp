@@ -57,8 +57,8 @@ bool setCanvasCallback(se::Object* global) {
     auto              viewSize = view->getViewSize();
     {
         auto windowPtr = reinterpret_cast<intptr_t>(handler);
-        ss << "window.innerWidth = " << viewSize[0] << "; ";
-        ss << "window.innerHeight = " << viewSize[1] << "; ";
+        ss << "window.innerWidth = " << viewSize[0] / CC_PIXEL_RATIO_CUSTOM << "; ";
+        ss << "window.innerHeight = " << viewSize[1] / CC_PIXEL_RATIO_CUSTOM << "; ";
         ss << "window.windowHandler = ";
         if (sizeof(windowPtr) == 8) { // use bigint
             ss << static_cast<uint64_t>(windowPtr) << "n;";

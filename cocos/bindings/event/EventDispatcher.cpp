@@ -114,10 +114,10 @@ void EventDispatcher::dispatchTouchEvent(const struct TouchEvent &touchEvent) {
     for (const auto &touch : touchEvent.touches) {
         se::Object *jsTouch = jsTouchObjPool.at(poolIndex++);
         jsTouch->setProperty("identifier", se::Value(touch.index));
-        jsTouch->setProperty("clientX", se::Value(touch.x / CC_POXEL_RATIO_CUSTOM));
-        jsTouch->setProperty("clientY", se::Value(touch.y / CC_POXEL_RATIO_CUSTOM));
-        jsTouch->setProperty("pageX", se::Value(touch.x / CC_POXEL_RATIO_CUSTOM));
-        jsTouch->setProperty("pageY", se::Value(touch.y / CC_POXEL_RATIO_CUSTOM));
+        jsTouch->setProperty("clientX", se::Value(touch.x / CC_PIXEL_RATIO_CUSTOM));
+        jsTouch->setProperty("clientY", se::Value(touch.y / CC_PIXEL_RATIO_CUSTOM));
+        jsTouch->setProperty("pageX", se::Value(touch.x / CC_PIXEL_RATIO_CUSTOM));
+        jsTouch->setProperty("pageY", se::Value(touch.y / CC_PIXEL_RATIO_CUSTOM));
 
         jsTouchObjArray->setArrayElement(touchIndex, se::Value(jsTouch));
         ++touchIndex;
@@ -154,8 +154,8 @@ void EventDispatcher::dispatchMouseEvent(const struct MouseEvent &mouseEvent) {
         jsMouseEventObj->root();
     }
 
-    const auto &           xVal = se::Value(mouseEvent.x / CC_POXEL_RATIO_CUSTOM);
-    const auto &           yVal = se::Value(mouseEvent.y / CC_POXEL_RATIO_CUSTOM);
+    const auto &           xVal = se::Value(mouseEvent.x / CC_PIXEL_RATIO_CUSTOM);
+    const auto &           yVal = se::Value(mouseEvent.y / CC_PIXEL_RATIO_CUSTOM);
     const MouseEvent::Type type = mouseEvent.type;
 
     if (type == MouseEvent::Type::WHEEL) {
@@ -257,8 +257,8 @@ void EventDispatcher::dispatchResizeEvent(int width, int height) {
         jsResizeEventObj->root();
     }
 
-    jsResizeEventObj->setProperty("width", se::Value(width / CC_POXEL_RATIO_CUSTOM));
-    jsResizeEventObj->setProperty("height", se::Value(height / CC_POXEL_RATIO_CUSTOM));
+    jsResizeEventObj->setProperty("width", se::Value(width / CC_PIXEL_RATIO_CUSTOM));
+    jsResizeEventObj->setProperty("height", se::Value(height / CC_PIXEL_RATIO_CUSTOM));
     se::ValueArray args;
     args.emplace_back(se::Value(jsResizeEventObj));
     EventDispatcher::doDispatchEvent(EVENT_RESIZE, "onResize", args);
