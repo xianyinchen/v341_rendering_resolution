@@ -31,7 +31,7 @@
 
 #include <cstdint>
 
-#define CC_PIXEL_RATIO_CUSTOM 1.5
+extern float CC_PIXEL_RATIO_CUSTOM;
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #include <BaseTsd.h>

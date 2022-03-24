@@ -35,6 +35,8 @@
     #include <native_layer_jni.h>
 #endif
 
+float CC_PIXEL_RATIO_CUSTOM = 1.0;
+
 namespace cc {
 namespace gfx {
 
@@ -42,6 +44,10 @@ static void updateFBO(GLES3GPUSwapchain* _gpuSwapchain) {
 #if 1
     if (_gpuSwapchain->glFramebufferTarget < 0) {
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_gpuSwapchain->glFramebufferTarget);
+    }
+    else {
+        glDeleteFramebuffers(1, &_gpuSwapchain->glFramebuffer);
+        glDeleteRenderbuffers(1, &_gpuSwapchain->gpuColorTexture->glTexture);
     }
 
     _gpuSwapchain->glWidthTarget = _gpuSwapchain->gpuColorTexture->width * CC_PIXEL_RATIO_CUSTOM;

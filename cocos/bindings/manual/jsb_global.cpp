@@ -765,6 +765,25 @@ static bool JSB_setPreferredFramesPerSecond(se::State &s) { //NOLINT
 }
 SE_BIND_FUNC(JSB_setPreferredFramesPerSecond)
 
+static bool JSB_setResolutionRatio(se::State &s) { //NOLINT
+    const auto &   args = s.args();
+    size_t         argc = args.size();
+    CC_UNUSED bool ok   = true;
+    if (argc > 0) {
+        ok = seval_to_float(args[0], &CC_PIXEL_RATIO_CUSTOM);
+        SE_PRECONDITION2(ok, false, "resolution ratio is invalid!");
+
+        auto size = Application::getInstance()->getViewLogicalSize();
+        EventDispatcher::dispatchResizeEvent(size.x, size.y);
+
+        return true;
+    }
+
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(JSB_setResolutionRatio)
+
 #if CC_USE_EDITBOX
 static bool JSB_showInputBox(se::State &s) { //NOLINT
     const auto &args = s.args();
@@ -866,6 +885,7 @@ bool jsb_register_global_variables(se::Object *global) { //NOLINT
     auto glContextCls = se::Class::create("WebGLRenderingContext", global, nullptr, nullptr);
     glContextCls->install();
 
+    __jsbObj->defineFunction("setResolutionRatio", _SE(JSB_setResolutionRatio));
     __jsbObj->defineFunction("garbageCollect", _SE(jsc_garbageCollect));
     __jsbObj->defineFunction("dumpNativePtrToSeObjectMap", _SE(jsc_dumpNativePtrToSeObjectMap));
 
