@@ -52,8 +52,6 @@ public:
 
     std::array<int, 2> getViewSize() const { return std::array<int, 2>{_width, _height}; }
 
-    int getPixelRatio() { return _pixelRatio; }
-
     HWND getWindowHandler();
 
     void swapbuffer() { SDL_GL_SwapWindow(_window); }
@@ -64,7 +62,6 @@ private:
     std::string _title;
     int         _width  = 0;
     int         _height = 0;
-    int         _pixelRatio = 1;
     bool        _inited = false;
 
     SDL_Window *_window = nullptr;

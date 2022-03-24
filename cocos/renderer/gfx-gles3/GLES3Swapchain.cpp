@@ -38,6 +38,34 @@
 namespace cc {
 namespace gfx {
 
+static void updateFBO(GLES3GPUSwapchain* _gpuSwapchain) {
+#if 1
+    if (_gpuSwapchain->glFramebufferTarget < 0) {
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_gpuSwapchain->glFramebufferTarget);
+    }
+
+    _gpuSwapchain->glWidthTarget = _gpuSwapchain->gpuColorTexture->width * CC_POXEL_RATIO_CUSTOM;
+    _gpuSwapchain->glHeightTarget = _gpuSwapchain->gpuColorTexture->height * CC_POXEL_RATIO_CUSTOM;
+
+    glGenFramebuffers(1, &_gpuSwapchain->glFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _gpuSwapchain->glFramebuffer);
+
+    glGenRenderbuffers(1, &_gpuSwapchain->gpuColorTexture->glTexture);
+    glBindRenderbuffer(GL_RENDERBUFFER, _gpuSwapchain->gpuColorTexture->glTexture);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, _gpuSwapchain->gpuColorTexture->width, _gpuSwapchain->gpuColorTexture->height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _gpuSwapchain->gpuColorTexture->glTexture);
+
+    // glGenRenderbuffers(1, &gMsaaRBDepth);
+    // glBindRenderbuffer(GL_RENDERBUFFER, gMsaaRBDepth);
+    // glRenderbufferStorageMultisampleOESEXT(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16_OES, width, height);
+
+    auto err = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (err != GL_FRAMEBUFFER_COMPLETE) {
+        assert(0);
+    }
+#endif
+}
+
 GLES3Swapchain::GLES3Swapchain() {
     _typedID = generateObjectID<decltype(this)>();
 }
@@ -100,6 +128,10 @@ void GLES3Swapchain::doInit(const SwapchainInfo& info) {
     initTexture(textureInfo, _depthStencilTexture);
 
     _gpuSwapchain->gpuColorTexture = static_cast<GLES3Texture*>(_colorTexture)->gpuTexture();
+
+    ///////////////////// Framebuffer Resolution /////////////////////
+
+    updateFBO(_gpuSwapchain);
 }
 
 void GLES3Swapchain::doDestroy() {
@@ -141,7 +173,7 @@ void GLES3Swapchain::doCreateSurface(void* windowHandle) {
     auto width  = static_cast<int>(_colorTexture->getWidth());
     auto height = static_cast<int>(_colorTexture->getHeight());
 #if CC_PLATFORM == CC_PLATFORM_ANDROID
-    ANativeWindow_setBuffersGeometry(window, width, height, nFmt);
+    ANativeWindow_setBuffersGeometry(window, width * CC_POXEL_RATIO_CUSTOM, height * CC_POXEL_RATIO_CUSTOM, nFmt);
 #elif CC_PLATFORM == CC_PLATFORM_OHOS
     NativeLayerHandle(window, NativeLayerOps::SET_WIDTH_AND_HEIGHT, width, height);
     NativeLayerHandle(window, SET_FORMAT, nFmt);
@@ -156,6 +188,11 @@ void GLES3Swapchain::doCreateSurface(void* windowHandle) {
     }
 
     context->makeCurrent(_gpuSwapchain, _gpuSwapchain);
+
+    ///////////////////// Framebuffer Resolution /////////////////////
+
+    updateFBO(_gpuSwapchain);
+
 }
 
 } // namespace gfx

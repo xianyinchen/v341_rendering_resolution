@@ -898,6 +898,9 @@ struct SwapchainInfo {
 
     uint32_t width{0U};
     uint32_t height{0U};
+
+    uint32_t widthTarget{0U};
+    uint32_t heightTarget{0U};
 };
 
 struct DeviceInfo {

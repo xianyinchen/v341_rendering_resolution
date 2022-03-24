@@ -86,8 +86,8 @@ std::shared_ptr<Scheduler> Application::scheduler = nullptr;
 Application::Application(int width, int height) {
     Application::instance = this;
     scheduler             = std::make_shared<Scheduler>();
-    _viewLogicalSize.x    = static_cast<float>(width);
-    _viewLogicalSize.y    = static_cast<float>(height);
+    _viewLogicalSize.x    = static_cast<float>(width / CC_POXEL_RATIO_CUSTOM);
+    _viewLogicalSize.y    = static_cast<float>(height / CC_POXEL_RATIO_CUSTOM);
 }
 
 Application::~Application() {

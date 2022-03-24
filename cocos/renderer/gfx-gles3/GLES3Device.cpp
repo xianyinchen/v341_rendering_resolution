@@ -266,7 +266,17 @@ void GLES3Device::present() {
     _numInstances = queue->_numInstances;
     _numTriangles = queue->_numTriangles;
 
+    auto *cache = stateCache();
     for (auto *swapchain : _swapchains) {
+        if (swapchain->glFramebuffer != 0 && swapchain->glFramebufferTarget >= 0) {            
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, swapchain->glFramebuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, (GLuint)swapchain->glFramebufferTarget);
+            glScissor(0, 0, swapchain->glWidthTarget, swapchain->glHeightTarget);
+            glBlitFramebuffer(0, 0, swapchain->gpuColorTexture->width, swapchain->gpuColorTexture->height, 0, 0, swapchain->glWidthTarget, swapchain->glHeightTarget, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, cache->glReadFramebuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, cache->glDrawFramebuffer);
+            glScissor(cache->scissor.x, cache->scissor.y, cache->scissor.width, cache->scissor.height);
+        }
         _gpuContext->present(swapchain);
     }
 

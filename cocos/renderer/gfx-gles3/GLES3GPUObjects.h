@@ -157,6 +157,9 @@ class GLES3GPUSwapchain final : public Object {
 public:
     EGLSurface       eglSurface{EGL_NO_SURFACE};
     EGLint           eglSwapInterval{0};
+    EGLint           glFramebufferTarget{-1};
+    EGLint           glWidthTarget{0};
+    EGLint           glHeightTarget{0};
     GLuint           glFramebuffer{0};
     GLES3GPUTexture *gpuColorTexture{nullptr};
 };
