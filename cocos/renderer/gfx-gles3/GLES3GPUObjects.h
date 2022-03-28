@@ -161,6 +161,7 @@ public:
     EGLint           glWidthTarget{0};
     EGLint           glHeightTarget{0};
     GLuint           glFramebuffer{0};
+    GLuint           glDepthStencilTexture{0};
     GLES3GPUTexture *gpuColorTexture{nullptr};
 };
 

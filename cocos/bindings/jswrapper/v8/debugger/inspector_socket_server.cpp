@@ -133,17 +133,15 @@ void PrintDebuggerReadyMessage(const std::string &             host,
     }
 
     for (const std::string &id : ids) {
-        if (host != "0.0.0.0") {
-            SE_LOGD("Debugger listening..., visit [ devtools://devtools/bundled/js_app.html?v8only=true&ws=%s ] in chrome browser to debug!\n",
-                    FormatWsAddress(host, port, id, false).c_str());
-        } else {
-            SE_LOGD("Debugger listening..., visit [\n");
-            for (auto &nif : ipList) {
-                SE_LOGD("    devtools://devtools/bundled/js_app.html?v8only=true&ws=%s\n",
-                        FormatWsAddress(std::get<2>(nif), port, id, false).c_str());
-            }
-            SE_LOGD("  ] in chrome browser to debug!\n");
+        SE_LOGD("Debugger listening..., visit [ devtools://devtools/bundled/js_app.html?v8only=true&ws=%s ] in chrome browser to debug!\n",
+                FormatWsAddress(host, port, id, false).c_str());
+
+        SE_LOGD("Debugger listening..., visit [\n");
+        for (auto &nif : ipList) {
+            SE_LOGD("    devtools://devtools/bundled/js_app.html?v8only=true&ws=%s\n",
+                    FormatWsAddress(std::get<2>(nif), port, id, false).c_str());
         }
+        SE_LOGD("  ] in chrome browser to debug!\n");
     }
     SE_LOGD("For help see %s\n",
             "https://nodejs.org/en/docs/inspector");

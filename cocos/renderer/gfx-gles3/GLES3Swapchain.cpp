@@ -47,6 +47,7 @@ static void updateFBO(GLES3GPUSwapchain* _gpuSwapchain) {
     }
     else {
         glDeleteFramebuffers(1, &_gpuSwapchain->glFramebuffer);
+        glDeleteRenderbuffers(1, &_gpuSwapchain->glDepthStencilTexture);
         glDeleteRenderbuffers(1, &_gpuSwapchain->gpuColorTexture->glTexture);
     }
 
@@ -61,9 +62,12 @@ static void updateFBO(GLES3GPUSwapchain* _gpuSwapchain) {
     glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, _gpuSwapchain->gpuColorTexture->width, _gpuSwapchain->gpuColorTexture->height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _gpuSwapchain->gpuColorTexture->glTexture);
 
-    // glGenRenderbuffers(1, &gMsaaRBDepth);
-    // glBindRenderbuffer(GL_RENDERBUFFER, gMsaaRBDepth);
-    // glRenderbufferStorageMultisampleOESEXT(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16_OES, width, height);
+    glGenRenderbuffers(1, &_gpuSwapchain->glDepthStencilTexture);
+    glBindRenderbuffer(GL_RENDERBUFFER, _gpuSwapchain->glDepthStencilTexture);
+
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _gpuSwapchain->gpuColorTexture->width, _gpuSwapchain->gpuColorTexture->height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _gpuSwapchain->glDepthStencilTexture);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _gpuSwapchain->glDepthStencilTexture);
 
     auto err = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (err != GL_FRAMEBUFFER_COMPLETE) {
